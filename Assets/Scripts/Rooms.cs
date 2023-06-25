@@ -34,11 +34,29 @@ public class Rooms : MonoBehaviour
 
     void roomPath(int previousX, int previousY, int currentX, int currentY, int roomCountLeft, int currentRoom, int originalRoomCount)
     {
+        int[] chances = { 10, 10, 10, 10 };
+        
+        // May not need to do this every time
+        bool[] currentRoomCheck = roomCheckSurroundingRooms(currentX, currentY, currentRoom);
 
-
-        roomCheckSurroundingRooms(currentX, currentY, currentRoom);
-
+        
+        
         // Look ahead room
+        if (currentRoomCheck[0] == false)
+        {
+            bool[] leftRoomCheck = roomCheckSurroundingRooms(currentX - 1, currentY, currentRoom);
+            for (int i = 0; i < leftRoomCheck.Length; i++)
+            {
+                if (leftRoomCheck[i] == true)
+                {
+                    chanceLeft -= 2;
+                }
+            }
+            chanceLeft += 2;
+        } 
+
+
+
 
     }
 
