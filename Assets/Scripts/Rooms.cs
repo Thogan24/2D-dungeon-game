@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Rooms : MonoBehaviour
 {
-    public int[,] rooms;
+    [SerializeField] public int[,] rooms;
     public int totalCurrentRoom;
 
     void Start()
     {
-        
+        generateFloor(10);
     }
 
     
@@ -23,7 +23,7 @@ public class Rooms : MonoBehaviour
         
 
         // [room #, properties]
-        rooms = new int[roomCount, 3];
+        rooms = new int[100, 3];
 
         // X
         rooms[0, 0] = 0;
@@ -38,6 +38,7 @@ public class Rooms : MonoBehaviour
 
     void roomPath(int currentX, int currentY, int roomCountLeft, int currentRoom)
     {
+        Debug.Log("( " + currentX + ", " + currentY + "); Rooms Left: " + roomCountLeft + "; Current Room:" + currentRoom);
         if (roomCountLeft > 0)
         {
             int[] chances = { 10, 10, 10, 10 };
@@ -133,34 +134,38 @@ public class Rooms : MonoBehaviour
 
             if(roomsGeneratedList[0] == true)
             {
-                generateRoom(currentX - 1, currentY, currentRoom);
+                totalCurrentRoom++;
+                generateRoom(currentX - 1, currentY, totalCurrentRoom);
 
                 roomPath(currentX - 1, currentY, (roomCountLeft - roomsGenerated) / roomsGenerated, totalCurrentRoom);
-                totalCurrentRoom++;
+                
             }
 
             if (roomsGeneratedList[1] == true)
             {
+                totalCurrentRoom++;
                 generateRoom(currentX + 1, currentY, currentRoom);
 
                 roomPath(currentX + 1, currentY, (roomCountLeft - roomsGenerated) / roomsGenerated, totalCurrentRoom);
-                totalCurrentRoom++;
+                
             }
 
             if (roomsGeneratedList[2] == true)
             {
-                generateRoom(currentX - 1, currentY, currentRoom);
-
-                roomPath(currentX - 1, currentY, (roomCountLeft - roomsGenerated) / roomsGenerated, totalCurrentRoom);
                 totalCurrentRoom++;
+                generateRoom(currentX, currentY - 1, currentRoom);
+
+                roomPath(currentX, currentY - 1, (roomCountLeft - roomsGenerated) / roomsGenerated, totalCurrentRoom);
+                
             }
 
             if (roomsGeneratedList[3] == true)
             {
-                generateRoom(currentX - 1, currentY, currentRoom);
-
-                roomPath(currentX - 1, currentY, (roomCountLeft - roomsGenerated) / roomsGenerated + (roomCountLeft - roomsGenerated) % roomsGenerated, totalCurrentRoom);
                 totalCurrentRoom++;
+                generateRoom(currentX, currentY + 1, currentRoom);
+
+                roomPath(currentX, currentY + 1, (roomCountLeft - roomsGenerated) / roomsGenerated + (roomCountLeft - roomsGenerated) % roomsGenerated, totalCurrentRoom);
+                
             }
 
 
